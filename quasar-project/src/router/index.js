@@ -1,5 +1,5 @@
 import { route } from 'quasar/wrappers'
-import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
+import { START_LOCATION, createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
 import { useUserStore } from '@/stores/user'
 /*
@@ -32,6 +32,9 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach(async (to, from, next) => {
     const user = useUserStore()
+    if (from === START_LOCATION) {
+      await useUserStore().getUser()
+    }
     if (user.isLogin && (to.path === '/register' || to.path === '/login')) {
       next('/')
     } else if (to.meta.login && !user.isLogin) {

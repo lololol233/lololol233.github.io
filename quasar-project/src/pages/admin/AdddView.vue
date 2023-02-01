@@ -1,6 +1,6 @@
 <template>
   <div id="admin-products">
-    <h2 class="text-center">商品管理</h2>
+    <h1 class="text-center">商品管理</h1>
     <div class="row">
         <div class="col-12">
             <q-btn color="primary" @click="openDialog(-1)">新增商品</q-btn>
@@ -28,46 +28,46 @@
             </q-table>
         </div>
     </div>
-  </div>
-  <q-dialog v-model="form.dialog" persistent>
-    <q-card>
-            <q-form @submit="submit">
-              <q-card-title>
-                  <h3 class="text-center">{{ form._id.length > 0 ? '編輯商品' : '新增商品' }}</h3>
-              </q-card-title>
-              <q-card-text>
-                  <div class="row">
-                      <div class="col-12">
-                          <q-input v-model="form.name" type="text" label="名稱" :rules="[rules.required]"/>
-                      </div>
-                      <div class="col-12">
-                          <q-input v-model="form.price" type="number" label="價格" :rules="[rules.required, rules.price]"/>
-                      </div>
-                      <div class="col-12">
-                          <q-input v-model="form.description" rows="3" auto-grow="auto-grow" label="說明" :rules="[rules.required]"/>
-                      </div>
-                      <div class="col-12">
-                          <q-select v-model="form.category" :options="categories" :rules="[rules.required]" label="種類"></q-select>
-                      </div>
-                      <div class="col-12">
-                          <q-checkbox v-model="form.sell" label="上架"></q-checkbox>
-                      </div>
-                      <div class="col-12">
-                          <!-- <v-image-input class="mx-auto" v-model="form.image" removable="removable" :max-file-size="1"></v-image-input> -->
-                      </div>
-                  </div>
-              </q-card-text>
-              <q-card-actions>
-                  <q-btn :disabled="form.loading" color="red" v-close-popup>取消</q-btn>
-                  <q-btn :disabled="form.loading" color="green" type="submit">送出</q-btn>
-              </q-card-actions>
-            </q-form>
-          </q-card>
-  </q-dialog>
+    <q-dialog v-model="form.dialog" persistent="persistent">
+        <q-form v-model="form.valid" @submit.prevent="submit">
+            <q-card>
+                <q-card-title>
+                    <h1 class="text-center">{{ form._id.length > 0 ? '編輯商品' : '新增商品' }}</h1>
+                </q-card-title>
+                <q-card-text>
+                    <div class="row">
+                        <div class="col-12">
+                            <q-text-field v-model="form.name" type="text" label="名稱" :rules="[rules.required]"></q-text-field>
+                        </div>
+                        <div class="col-12">
+                            <q-text-field v-model="form.price" type="number" label="價格" :rules="[rules.required, rules.price]"></q-text-field>
+                        </div>
+                        <div class="col-12">
+                            <q-textarea v-model="form.description" rows="3" auto-grow="auto-grow" label="說明" :rules="[rules.required]"></q-textarea>
+                        </div>
+                        <div class="col-12">
+                            <q-select v-model="form.category" :items="categories" :rules="[rules.required]"></q-select>
+                        </div>
+                        <div class="col-12">
+                            <q-checkbox v-model="form.sell" label="上架"></q-checkbox>
+                        </div>
+                        <div class="col-12">
+                            <q-image-input class="mx-auto" v-model="form.image" removable="removable" :max-file-size="1"></q-image-input>
+                        </div>
+                    </div>
+                </q-card-text>
+                <q-card-actions>
+                    <q-btn :disabled="form.loading" color="red" @click="form.dialog = false">取消</q-btn>
+                    <q-btn :disabled="form.loading" color="green" type="submit">送出</q-btn>
+                </q-card-actions>
+            </q-card>
+        </q-form>
+    </q-dialog>
+</div>
 </template>
 
 <script setup>
-import { apiAuth } from '@/boot/axios'
+import { apiAuth } from '@/plugins/axios'
 import { reactive } from 'vue'
 import Swal from 'sweetalert2'
 

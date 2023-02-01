@@ -31,8 +31,8 @@
       />
 
       <q-input
+      type="password"
       v-model="form.passwordConfirm"
-      filled :type="isPwd ? 'password' : 'text'"
       hint="Password with toggle"
       label="Confirm your password *"
       :rules="[rules.required, rules.length, rules.passwordConfirm]">

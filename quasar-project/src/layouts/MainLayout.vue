@@ -19,9 +19,13 @@
         <q-route-tab to="/intro" label="Intro" />
         <q-route-tab to="/news" label="news" />
         <q-route-tab to="/reading" label="Reading" />
-        <q-route-tab to="/products" label="Product" />
-        <q-route-tab to="/register" label="Sign up" />
-        <q-route-tab to="/login" label="Login" />
+        <q-route-tab to="/products" label="Products" />
+        <q-route-tab v-if="isLogin" to="/orders" label="Orders" />
+        <q-route-tab v-if="isLogin" :content="cart" to="/cart" label="Cart" />
+        <q-route-tab v-if="!isLogin" to="/register" label="Sign up" />
+        <q-route-tab v-if="!isLogin" to="/login" label="Login" />
+        <q-route-tab v-if="isLogin && isAdmin" to="/admin" label="Admin" />
+        <q-route-tab v-if="isLogin" @click="logout" label="Logout" />
       </q-tabs>
     </q-header>
 
@@ -32,72 +36,13 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
+<script setup>
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/stores/user'
 // import EssentialLink from 'components/EssentialLink.vue'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+const user = useUserStore()
+const { isLogin, isAdmin, cart } = storeToRefs(user)
+const { logout } = user
 
-export default defineComponent({
-  name: 'MainLayout',
-
-  // components: {
-  //   EssentialLink
-  // },
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
 </script>

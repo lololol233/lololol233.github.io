@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { api, apiAuth } from '@/boot/axios'
 import Swal from 'sweetalert2'
-import router from '@/router/routes'
+// import router from '@/router/routes'
 
 export const useUserStore = defineStore('user', () => {
   const token = ref('')
@@ -20,8 +20,7 @@ export const useUserStore = defineStore('user', () => {
   const avatar = computed(() => {
     return `https://source.boringavatars.com/beam/256/${account.value}?colors=ffabab,ffdaab,ddffab,abe4ff,d9abff`
   })
-
-  const login = async (form) => {
+  async function login (form) {
     try {
       const { data } = await api.post('/users/login', form)
       token.value = data.result.token
@@ -34,7 +33,7 @@ export const useUserStore = defineStore('user', () => {
         title: '成功',
         text: '登入成功'
       })
-      router.push('/')
+      this.router.push('/')
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -44,14 +43,14 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  const logout = async () => {
+  async function logout () {
     try {
       await apiAuth.delete('/users/logout')
       token.value = ''
       account.value = ''
       role.value = 0
       cart.value = 0
-      router.push('/')
+      this.router.push('/')
       Swal.fire({
         icon: 'success',
         title: '成功',
@@ -79,14 +78,14 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  const editCart = async ({ _id, quantity }) => {
+  async function editCart ({ _id, quantity }) {
     if (token.value.length === 0) {
       Swal.fire({
         icon: 'error',
         title: '失敗',
         text: '請先登入'
       })
-      router.push('/login')
+      this.router.push('/login')
       return
     }
     try {

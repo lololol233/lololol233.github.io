@@ -17,7 +17,7 @@
 
       <q-input
       v-model="form.password"
-      filled :type="isPwd ? 'password' : 'text'"
+      type="password"
       hint="Password with toggle"
       label="Your password *"
       :rules="[rules.required, rules.length]">

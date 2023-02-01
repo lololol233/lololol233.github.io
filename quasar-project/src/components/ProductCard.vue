@@ -1,5 +1,5 @@
 <template>
-  <h1>Oder Admin</h1>
+  <h1>商品卡片</h1>
 </template>
 
 <script setup>
