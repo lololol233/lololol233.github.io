@@ -1,7 +1,6 @@
 <template>
-  <h3>Register</h3>
+  <h3 class="title">Create Account</h3>
   <div class="q-pa-md" style="max-width: 800px">
-
     <q-form
       @reset="onReset"
       class="q-gutter-md"

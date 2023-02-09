@@ -1,12 +1,42 @@
+<style scoped>
+.col-10{
+  margin: auto;
+  margin-bottom: 20px;
+}
+</style>
 <template>
   <div id="admin-products">
-    <h2 class="text-center">商品管理</h2>
+    <h2 class="title">商品管理</h2>
     <div class="row">
-        <div class="col-12">
+        <div class="col-10 mb-lg">
             <q-btn color="primary" @click="openDialog(-1)">新增商品</q-btn>
         </div>
-        <div class="col-12">
-            <q-table>
+        <!-- Quasar範例 -->
+        <div class="col-10">
+          <q-table :rows="products" :columns="columns">
+          </q-table>
+        </div>
+        <!-- 雅嵐範例 -->
+        <q-table :rows="filterData" :columns="columns" row-key="_id">
+          <template v-slot:body-cell-image="props">
+        <q-td>
+          <img :src="props.row.image" style="height: 100px" />
+        </q-td>
+    </template>
+    <template v-slot:body-cell-sell="props">
+        <q-td>
+            <q-icon class="btn-size" :name="props.row.sell? 'fa-solid fa-face-smile': 'fa-solid fa-face-dizzy'"></q-icon>
+        </q-td>
+    </template>
+    <template v-slot:body-cell-edit="props">
+        <q-td>
+            <q-btn round="round" @click="openAdd(filterData.findIndex(item =&gt; item._id === props.row._id ))" icon="fa-solid fa-pen-to-square"></q-btn>
+        </q-td>
+    </template>
+        </q-table>
+        <!-- 老師範例 -->
+        <!-- <div class="col-12">
+            <table>
                 <thead>
                     <tr>
                         <th>圖片</th>
@@ -21,12 +51,12 @@
                         </td>
                         <td>{{ product.name }}</td>
                         <td>
-                            <q-btn color="primary" icon="mdi-pencil" variant="text" @click="openDialog(idx)"></q-btn>
+                            <q-btn color="primary" variant="text" @click="openDialog(idx)"><q-icon name="build" color="white"></q-icon></q-btn>
                         </td>
                     </tr>
                 </tbody>
-            </q-table>
-        </div>
+            </table>
+        </div> -->
     </div>
   </div>
   <q-dialog v-model="form.dialog" persistent>
@@ -50,16 +80,24 @@
                           <q-select v-model="form.category" :options="categories" :rules="[rules.required]" label="種類"></q-select>
                       </div>
                       <div class="col-12">
+                        <q-file v-model="form.image" label="Pick Images" filled append accept=".jpg, image/*" @rejected="onRejected">
+                          <template v-slot:prepend>
+                          <q-icon name="image" />
+                        </template>
+                        </q-file>
+                      </div>
+                      <div class="col-12">
                           <q-checkbox v-model="form.sell" label="上架"></q-checkbox>
                       </div>
                       <div class="col-12">
                           <!-- <v-image-input class="mx-auto" v-model="form.image" removable="removable" :max-file-size="1"></v-image-input> -->
+
                       </div>
                   </div>
               </q-card-text>
               <q-card-actions>
-                  <q-btn :disabled="form.loading" color="red" v-close-popup>取消</q-btn>
-                  <q-btn :disabled="form.loading" color="green" type="submit">送出</q-btn>
+                  <q-btn :disabled="form.loading" cocolor="primary" v-close-popup>取消</q-btn>
+                  <q-btn :disabled="form.loading" color="primary" type="submit">送出</q-btn>
               </q-card-actions>
             </q-form>
           </q-card>
@@ -70,8 +108,33 @@
 import { apiAuth } from '@/boot/axios'
 import { reactive } from 'vue'
 import Swal from 'sweetalert2'
-
-const categories = ['衣服', '皮件', '鞋子', '飾品', '3C', '其他']
+// const columns = [
+//   {
+//     name: 'name',
+//     label: 'Name',
+//     field: products => products.name,
+//     align: 'center'
+//   },
+//   {
+//     name: 'id',
+//     label: 'ID',
+//     field: products => products._id,
+//     align: 'center'
+//   },
+//   {
+//     name: 'price',
+//     label: '金額',
+//     field: products => products.price,
+//     align: 'center'
+//   },
+//   {
+//     name: 'product',
+//     label: '商品',
+//     field: orders => orders.products[0],
+//     align: 'center'
+//   }
+// ]
+const categories = ['書', '明信片', '其他']
 const rules = {
   required (value) {
     return !!value || '欄位必填'
@@ -90,7 +153,6 @@ const form = reactive({
   image: undefined,
   sell: false,
   category: '',
-  valid: false,
   loading: false,
   dialog: false,
   idx: -1
@@ -105,7 +167,6 @@ const openDialog = (idx) => {
     form.image = undefined
     form.sell = false
     form.category = ''
-    form.valid = false
     form.loading = false
     form.idx = -1
   } else {
@@ -116,7 +177,6 @@ const openDialog = (idx) => {
     form.image = undefined
     form.sell = products[idx].sell
     form.category = products[idx].category
-    form.valid = false
     form.loading = false
     form.idx = idx
   }
@@ -124,8 +184,6 @@ const openDialog = (idx) => {
 }
 
 const submit = async () => {
-  if (!form.valid) return
-
   form.loading = true
 
   // fd.append(key, value)

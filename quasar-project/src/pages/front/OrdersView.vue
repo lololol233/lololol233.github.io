@@ -1,159 +1,113 @@
-<template>
-    <div class="q-pa-md">
-    <q-option-group
-        v-model="separator"
-        inline
-        class="q-mb-md"
-        :options="[
-        { label: 'Horizontal (default)', value: 'horizontal' },
-        { label: 'Vertical', value: 'vertical' },
-        { label: 'Cell', value: 'cell' },
-        { label: 'None', value: 'none' },
-        ]"
-    />
+<style scoped>
+/* table{
+  width: 80rem;
+  background-color: white;
+  margin: auto;
+  border-radius: 10px;
+  outline-style: none;
+  border: 1px solid gray;
+  border-spacing: 0;
+} */
+/* td{
+  border: 1px solid gray;
+  border-spacing: 0;
 
-    <q-table
-        title="Treats"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        :separator="separator"
-    />
+} */
+.col-10{
+  margin: auto;
+}
+</style>
+
+<template>
+
+<div id="orders">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="title">訂單</h3>
+        </div>
+        <!-- Quasar範例 -->
+        <div class="col-10">
+        <q-table :rows="orders" :columns="columns">
+        </q-table>
+      </div>
+        <!-- 老師範例 -->
+        <!-- <div class="col-12">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>日期</th>
+                        <th>金額</th>
+                        <th>商品</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="order in orders" :key="order._id">
+                        <td>{{ order._id }}</td>
+                        <td>{{ new Date(order.date).toLocaleDateString() }}</td>
+                        <td>{{ order.totalPrice }}</td>
+                        <td>
+                            <ul>
+                                <li v-for="product in order.products" :key="product._id">{{ product.quantity + ' 個 ' + product.p_id.name }}</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
     </div>
+</div>
 </template>
 
-<script>
-import { ref } from 'vue'
+<script setup>
+import { reactive } from 'vue'
+import { apiAuth } from '@/boot/axios'
+import Swal from 'sweetalert2'
 
+// 範例
 const columns = [
   {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-]
-
-const rows = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%'
+    name: 'id',
+    label: 'ID',
+    field: orders => orders._id,
+    align: 'center'
   },
   {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%'
+    name: 'date',
+    label: '日期',
+    field: orders => new Date(orders.date).toLocaleDateString(),
+    align: 'center'
   },
   {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%'
+    name: 'price',
+    label: '金額',
+    field: orders => orders.totalPrice,
+    align: 'center'
   },
   {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%'
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%'
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%'
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%'
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%'
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%'
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%'
+    name: 'product',
+    label: '商品',
+    field: orders => orders.products[0],
+    align: 'center'
   }
 ]
 
-export default {
-  setup () {
-    return {
-      separator: ref('vertical'),
-      columns,
-      rows
-    }
+const orders = reactive([]);
+
+(async () => {
+  try {
+    const { data } = await apiAuth.get('/orders')
+    orders.push(...data.result.map(order => {
+      order.totalPrice = order.products.reduce((total, current) => total + current.p_id.price * current.quantity, 0)
+      return order
+    }))
+    console.log(orders)
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: '取得訂單失敗'
+    })
   }
-}
+})()
 </script>

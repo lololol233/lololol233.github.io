@@ -1,24 +1,79 @@
-<template>
-  <h3>Login</h3>
-  <div class="q-pa-md" style="max-width: 800px">
+<style scoped>
+.all{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+.right,
+.left{
+  width: 50vw;
+  background-color: var(--secondary);
+}
+.form{
+  margin: auto;
+  padding: 3rem;
+  max-width: 35vw;
+}
+p{
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: 1.2rem;
+  color: gray;
+}
+.q-btn{
+  width: 30vw;
+  height: 3rem;
+  margin-bottom: 2rem;
+  font-size: large;
+  background-color: white;
+}
+@media screen and (max-width: 908px){
+  .left{
+    display:none;
+  }
+  .right{
+    width: 100vw;
+  }
+  .q-btn,
+  .form,
+  .q-input{
+    width: 70vw;
+    display: flex;
+  }
+}
 
+</style>
+
+<template>
+  <div class="all">
+<div class="left">
+  <q-img src="@/img/Dosto2.jpg"
+          :ratio="1/1">
+          <div class="absolute-bottom text-subtitle1 text-center">
+            Photo of Dostoevsky
+          </div></q-img>
+</div>
+  <div class="right">
+    <h3 class="title">Login</h3>
+    <p>Welcome to the Dostoevsky World</p>
+<div class="form">
     <q-form
       @reset="onReset"
       class="q-gutter-md"
       @submit="login"
     >
+    <div class="input">
       <q-input
-        filled
+      outlined
         v-model="form.account"
         label="Your account *"
-        hint="account > 4 <15"
         :rules="[rules.required, rules.length]"
       />
 
-      <q-input
+      <q-input class="input2"
+      outlined
       v-model="form.password"
       type="password"
-      hint="Password with toggle"
       label="Your password *"
       :rules="[rules.required, rules.length]">
         <template v-slot:append>
@@ -29,12 +84,15 @@
           />
         </template>
       </q-input>
+    </div>
       <div>
-        <q-btn label="Submit" type="submit" color="primary" :loading="loading"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn label="login" type="submit" color="primary" :loading="loading" />
+        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml" />
       </div>
     </q-form>
   </div>
+  </div>
+</div>
 </template>
 
 <script setup>

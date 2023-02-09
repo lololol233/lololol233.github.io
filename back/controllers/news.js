@@ -1,14 +1,13 @@
-import products from '../models/products.js'
+import news from '../models/news.js'
 
-export const createProduct = async (req, res) => {
+export const createNew = async (req, res) => {
   console.log(req.file)
   try {
-    const result = await products.create({
+    const result = await news.create({
       name: req.body.name,
-      price: req.body.price,
       description: req.body.description,
       image: req.file?.path || '',
-      sell: req.body.sell,
+      post: req.body.post,
       category: req.body.category
     })
     res.status(200).json({ success: true, message: '', result })
@@ -21,27 +20,27 @@ export const createProduct = async (req, res) => {
   }
 }
 
-export const getSellProducts = async (req, res) => {
+export const getpostNews = async (req, res) => {
   try {
-    const result = await products.find({ sell: true })
+    const result = await news.find({ post: true })
     res.status(200).json({ success: true, message: '', result })
   } catch (error) {
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
 
-export const getAllProducts = async (req, res) => {
+export const getAllNews = async (req, res) => {
   try {
-    const result = await products.find()
+    const result = await news.find()
     res.status(200).json({ success: true, message: '', result })
   } catch (error) {
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
 
-export const getProduct = async (req, res) => {
+export const getNew = async (req, res) => {
   try {
-    const result = await products.findById(req.params.id)
+    const result = await news.findById(req.params.id)
     if (!result) {
       res.status(404).json({ success: false, message: '找不到' })
     } else {
@@ -56,14 +55,13 @@ export const getProduct = async (req, res) => {
   }
 }
 
-export const editProduct = async (req, res) => {
+export const editNew = async (req, res) => {
   try {
-    const result = await products.findByIdAndUpdate(req.params.id, {
+    const result = await news.findByIdAndUpdate(req.params.id, {
       name: req.body.name,
-      price: req.body.price,
       description: req.body.description,
       image: req.file?.path,
-      sell: req.body.sell,
+      post: req.body.post,
       category: req.body.category
     }, { new: true })
     if (!result) {

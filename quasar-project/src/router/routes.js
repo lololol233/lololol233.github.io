@@ -50,12 +50,42 @@ const routes = [
         }
       },
       {
-        path: 'products',
-        name: 'products',
-        component: () => import('pages/front/ProductsView.vue'),
+        path: 'news/:id',
+        name: 'article',
+        component: () => import('pages/front/ArticleView.vue'),
+        meta: {
+          title: 'Dostoevsky | 文章詳情',
+          login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'items',
+        name: 'items',
+        component: () => import('pages/front/ItemsView.vue'),
         meta: {
           title: ' Dostoevsky | 商品',
           login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'products/:id',
+        name: 'product',
+        component: () => import('pages/front/ProductView.vue'),
+        meta: {
+          title: 'Dostoevsky | 商品詳情',
+          login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'cart',
+        name: 'cart',
+        component: () => import('pages/front/CartView.vue'),
+        meta: {
+          title: ' Dostoevsky | 購物車',
+          login: true,
           admin: false
         }
       },
@@ -95,22 +125,22 @@ const routes = [
     path: '/admin',
     component: () => import('@/layouts/AdminLayout.vue'),
     children: [
+      // {
+      //   path: '',
+      //   name: 'admin-home',
+      //   component: () => import('@/pages/admin/HomeView.vue'),
+      //   meta: {
+      //     title: 'Admin | 管理',
+      //     login: true,
+      //     admin: true
+      //   }
+      // },
       {
         path: '',
-        name: 'admin-home',
-        component: () => import('@/pages/admin/HomeView.vue'),
-        meta: {
-          title: '購物網 | 管理',
-          login: true,
-          admin: true
-        }
-      },
-      {
-        path: 'products',
         name: 'admin-products',
         component: () => import('@/pages/admin/ProductsView.vue'),
         meta: {
-          title: '購物網 | 商品管理',
+          title: 'Admin | 商品管理',
           login: true,
           admin: true
         }
@@ -120,7 +150,7 @@ const routes = [
         name: 'admin-news',
         component: () => import('@/pages/admin/NewsView.vue'),
         meta: {
-          title: '購物網 | 文章管理',
+          title: 'Admin | 文章管理',
           login: true,
           admin: true
         }
@@ -130,7 +160,7 @@ const routes = [
         name: 'admin-orders',
         component: () => import('@/pages/admin/OrdersView.vue'),
         meta: {
-          title: '購物網 | 訂單管理',
+          title: 'Admin | 訂單管理',
           login: true,
           admin: true
         }

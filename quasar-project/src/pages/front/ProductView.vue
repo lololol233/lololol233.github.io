@@ -1,32 +1,31 @@
 <template>
-<h1>Products</h1>
-    <div id="product">
-    <div class="row">
+  <div id="product">
+    <div class="row ">
+
         <div class="col-12">
-            <h1 class="text-center">{{ product.name }}</h1>
+            <img :src="product.image">
+            <h3 class="text-center">{{ product.name }}</h3>
         </div>
         <div class="col-12">
-            <img src="product.image">
-        </div>
-        <div class="col-12">
-            <p>$商品价格</p>
-            <p class="pre">商品描述</p>
+          <p>${{ product.price }}</p>
+          <p class="pre">{{ product.description }}</p>
         </div>
         <div class="col-12">
             <q-form @submit="submitCart">
-                <q-text-field type="number" label="數量"></q-text-field>
+                <q-input  v-model.number="quantity" type="number" label="數量" :rules="[rules.required, rules.number]"></q-input>
                 <q-btn type="submit" color="primary">加入購物車</q-btn>
             </q-form>
         </div>
     </div>
-    <div class="align-center justify-center text-center" persistent="persistent">
-        <h1 class="text-red">已下架</h1>
-        <q-btn>回上頁</q-btn>
-    </div>
-</div>
+      <div class="align-center justify-center text-center" persistent="persistent" :model-value="!product.sell" >
+          <!-- <h1 class="text-red">已下架</h1> -->
+          <q-btn @click="router.go(-1)">回上頁</q-btn>
+      </div>
+  </div>
 </template>
 
 <script setup>
+
 import { reactive, ref } from 'vue'
 import { api } from '@/boot/axios'
 import { useRoute, useRouter } from 'vue-router'
@@ -42,14 +41,14 @@ const { editCart } = user
 const valid = ref(false)
 const quantity = ref(0)
 
-// const rules = {
-//   required (value) {
-//     return !!value || '欄位必填'
-//   },
-//   number (value) {
-//     return value > 0 || '數量錯誤'
-//   }
-// }
+const rules = {
+  required (value) {
+    return !!value || '欄位必填'
+  },
+  number (value) {
+    return value > 0 || '數量錯誤'
+  }
+}
 
 const product = reactive({
   _id: '',

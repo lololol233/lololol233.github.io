@@ -1,4 +1,7 @@
-<style lang="scss" scoped>
+<style>
+body{
+  background-color: var(--secondary);
+}
 </style>
 
 <template>
@@ -19,7 +22,7 @@
         <q-route-tab to="/intro" label="Intro" />
         <q-route-tab to="/news" label="news" />
         <q-route-tab to="/reading" label="Reading" />
-        <q-route-tab to="/products" label="Products" />
+        <q-route-tab to="/items" label="Items" />
         <q-route-tab v-if="isLogin" to="/orders" label="Orders" />
         <q-route-tab v-if="isLogin" :content="cart" to="/cart" label="Cart" />
         <q-route-tab v-if="!isLogin" to="/register" label="Sign up" />
@@ -32,7 +35,11 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
+    <q-footer reveal elevated>
+        <q-toolbar>
+          <q-toolbar-title>Dostoevsky@c</q-toolbar-title>
+        </q-toolbar>
+      </q-footer>
   </q-layout>
 </template>
 
